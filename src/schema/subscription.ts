@@ -7,6 +7,6 @@ export const resolvers = {
 	Subscription: {
 		gameScoreUpdate: {
 			subscribe: () => pubsub.asyncIterator(GAME_SCORE)
-		}
+		} as any
 	}
 };

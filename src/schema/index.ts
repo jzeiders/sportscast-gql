@@ -15,7 +15,7 @@ const typeDefs: String = `
         Game : Game
         Games : [Game]
         Player: Player
-        Players: [Player]
+		Players: [Player]
     }
     type Subscription {
         gameScoreUpdate: GameScore
@@ -64,7 +64,11 @@ const typeDefs: String = `
         number: String
         awayScore: Int
         homeScore: Int
-    }
+	}
+	type DFS {
+		fantasyPoints: Int
+		salary: Int
+	}
 `;
 
 const resolvers = {
@@ -128,9 +132,11 @@ const resolvers = {
 	...SubscriptionResolvers
 };
 
+//Graphql Types don't support subscriptions in typings
+//This should be fixed at somepoint
 const jsSchema = makeExecutableSchema({
-	typeDefs,
-	resolvers
+	typeDefs: typeDefs as any,
+	resolvers: resolvers as any
 });
 
 export default jsSchema;

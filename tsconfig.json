@@ -3,6 +3,12 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "outDir": "build",
-        "target": "es2016"
+        "target": "es6",
+        "lib": [
+            "es2016",
+            "esnext.asynciterable"
+        ],
+        "moduleResolution": "node",
+        "module": "commonjs"
     }
 }

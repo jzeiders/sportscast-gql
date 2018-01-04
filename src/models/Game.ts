@@ -10,6 +10,7 @@ import {
 
 import { Team } from "./Team";
 import { Quarter } from "./Quarter";
+import { DFS } from "./DFS";
 @Table
 export class Game extends Model<Game> {
 	@Column({
@@ -38,4 +39,7 @@ export class Game extends Model<Game> {
 
 	@HasMany(() => Quarter)
 	Qaurters: Quarter[];
+
+	@HasMany(() => DFS)
+	DFSs: DFS[];
 }

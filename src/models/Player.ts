@@ -3,10 +3,12 @@ import {
 	Model,
 	Column,
 	ForeignKey,
-	BelongsTo
+	BelongsTo,
+	HasMany
 } from "sequelize-typescript";
 
 import { Team } from "./Team";
+import { DFS } from "./DFS";
 
 @Table
 export class Player extends Model<Player> {
@@ -33,4 +35,7 @@ export class Player extends Model<Player> {
 
 	@BelongsTo(() => Team)
 	team: Team;
+
+	@HasMany(() => DFS)
+	DFSs: DFS[];
 }

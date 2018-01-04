@@ -1,6 +1,15 @@
-import { Table, Model, Column, HasMany } from "sequelize-typescript";
+import {
+	Table,
+	Model,
+	Column,
+	HasMany,
+	BelongsToMany
+} from "sequelize-typescript";
 import { Game } from "./Game";
 import { Player } from "./Player";
+import { User } from "./User";
+import { UserTeam } from "./UserTeam";
+import { DFS } from "./DFS";
 @Table
 class Team extends Model<Team> {
 	@Column({
@@ -19,6 +28,12 @@ class Team extends Model<Team> {
 
 	@HasMany(() => Player)
 	players: Player[];
+
+	@HasMany(() => DFS)
+	DFSs: DFS[];
+
+	@BelongsToMany(() => User, () => UserTeam)
+	teams: Team[];
 }
 
 export { Team };

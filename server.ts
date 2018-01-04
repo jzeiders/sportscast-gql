@@ -11,7 +11,7 @@ import { createServer } from "http";
 import * as cors from "cors";
 import { SubscriptionServer } from "subscriptions-transport-ws";
 
-const PORT = 4000;
+const PORT = 8080;
 
 const app = express();
 app.use(cors());
