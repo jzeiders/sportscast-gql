@@ -3,9 +3,11 @@ import { Model } from "sequelize-typescript";
 import { Team } from "../models/Team";
 import { Game } from "../models/Game";
 import { Player } from "../models/Player";
+import { User } from "../models/User";
 import { Op } from "sequelize";
 import { Quarter } from "../models/Quarter";
 import { resolvers as SubscriptionResolvers } from "./subscription";
+import { resolvers as MutationResolvers } from "./mutation";
 
 const typeDefs: String = `
     type Query {
@@ -16,7 +18,16 @@ const typeDefs: String = `
         Games : [Game]
         Player: Player
 		Players: [Player]
-    }
+		viewer: User
+	}
+	input SetUserTeamsInput {
+		teams: [String]
+		userId: String
+	}
+
+	type Mutation {
+		setUserTeams(input: SetUserTeamsInput) : User
+	}
     type Subscription {
         gameScoreUpdate: GameScore
     }
@@ -30,7 +41,8 @@ const typeDefs: String = `
         teamID  : String
         city : String
         name : String
-        abbreviation : String
+		abbreviation : String
+		division: String
         Games : [Game]
     }
     type Game {
@@ -69,12 +81,18 @@ const typeDefs: String = `
 		fantasyPoints: Int
 		salary: Int
 	}
+	type User {
+		name: String
+		id: Int
+		email: String
+		teams: [Team]
+	}
 `;
 
 const resolvers = {
 	Query: {
 		hello(root, args, context) {
-			return "Hello world!";
+			return JSON.stringify(context.user.email);
 		},
 		Team(root, { teamID }, context) {
 			return Team.findById<Team>(teamID, { raw: true }).then(team => {
@@ -98,6 +116,9 @@ const resolvers = {
 		},
 		Players(root, args, context) {
 			return Player.findAll({ raw: true });
+		},
+		viewer(root, args, context) {
+			return User.findById(context.id);
 		}
 	},
 	Game: {
@@ -129,6 +150,7 @@ const resolvers = {
 			});
 		}
 	},
+	...MutationResolvers,
 	...SubscriptionResolvers
 };
 

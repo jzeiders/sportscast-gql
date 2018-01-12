@@ -13,13 +13,12 @@ const bodyParser = require("body-parser");
 const apollo_server_express_1 = require("apollo-server-express");
 const schema_1 = require("./src/schema");
 const graphql_1 = require("graphql");
-const Team_1 = require("./src/models/Team");
-const Game_1 = require("./src/models/Game");
 const subscription_1 = require("./src/schema/subscription");
 const db_1 = require("./src/db");
 const http_1 = require("http");
 const cors = require("cors");
 const subscriptions_transport_ws_1 = require("subscriptions-transport-ws");
+const testdata_1 = require("./src/testdata");
 const PORT = 8080;
 const app = express();
 app.use(cors());
@@ -46,18 +45,13 @@ db_1.default.connection
             path: "/subscriptions"
         });
     });
-    sampleData();
+    testdata_1.default();
     updateScores();
 })
     .catch(err => {
     console.log("Failed to Start");
     console.log(err);
 });
-function sampleData() {
-    Team_1.Team.create({ teamID: "0", name: "Heat" });
-    Team_1.Team.create({ teamID: "1", name: "Celtics" });
-    Game_1.Game.create({ location: "Boston", homeTeamId: 1, awayTeamId: 0 });
-}
 function updateScores() {
     return __awaiter(this, void 0, void 0, function* () {
         setInterval(() => {

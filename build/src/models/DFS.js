@@ -10,60 +10,58 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
-const Game_1 = require("./Game");
 const Player_1 = require("./Player");
-const User_1 = require("./User");
-const UserTeam_1 = require("./UserTeam");
-const DFS_1 = require("./DFS");
-let Team = class Team extends sequelize_typescript_1.Model {
+const Game_1 = require("./Game");
+const Team_1 = require("./Team");
+let DFS = class DFS extends sequelize_typescript_1.Model {
 };
 __decorate([
     sequelize_typescript_1.Column({
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     }),
-    __metadata("design:type", String)
-], Team.prototype, "teamID", void 0);
+    __metadata("design:type", Number)
+], DFS.prototype, "id", void 0);
 __decorate([
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], Team.prototype, "city", void 0);
+], DFS.prototype, "company", void 0);
 __decorate([
     sequelize_typescript_1.Column,
-    __metadata("design:type", String)
-], Team.prototype, "name", void 0);
+    __metadata("design:type", Number)
+], DFS.prototype, "fantasyPoints", void 0);
 __decorate([
     sequelize_typescript_1.Column,
-    __metadata("design:type", String)
-], Team.prototype, "abbreviation", void 0);
+    __metadata("design:type", Number)
+], DFS.prototype, "salary", void 0);
 __decorate([
+    sequelize_typescript_1.ForeignKey(() => Team_1.Team),
     sequelize_typescript_1.Column,
     __metadata("design:type", String)
-], Team.prototype, "division", void 0);
+], DFS.prototype, "teamId", void 0);
 __decorate([
+    sequelize_typescript_1.BelongsTo(() => Team_1.Team),
+    __metadata("design:type", Team_1.Team)
+], DFS.prototype, "team", void 0);
+__decorate([
+    sequelize_typescript_1.ForeignKey(() => Game_1.Game),
     sequelize_typescript_1.Column,
-    __metadata("design:type", String)
-], Team.prototype, "color", void 0);
+    __metadata("design:type", Number)
+], DFS.prototype, "gameId", void 0);
 __decorate([
+    sequelize_typescript_1.BelongsTo(() => Game_1.Game),
+    __metadata("design:type", Game_1.Game)
+], DFS.prototype, "game", void 0);
+__decorate([
+    sequelize_typescript_1.ForeignKey(() => Player_1.Player),
     sequelize_typescript_1.Column,
-    __metadata("design:type", String)
-], Team.prototype, "logo", void 0);
+    __metadata("design:type", Number)
+], DFS.prototype, "playerId", void 0);
 __decorate([
-    sequelize_typescript_1.HasMany(() => Game_1.Game),
-    __metadata("design:type", Array)
-], Team.prototype, "games", void 0);
-__decorate([
-    sequelize_typescript_1.HasMany(() => Player_1.Player),
-    __metadata("design:type", Array)
-], Team.prototype, "players", void 0);
-__decorate([
-    sequelize_typescript_1.HasMany(() => DFS_1.DFS),
-    __metadata("design:type", Array)
-], Team.prototype, "DFSs", void 0);
-__decorate([
-    sequelize_typescript_1.BelongsToMany(() => User_1.User, () => UserTeam_1.UserTeam),
-    __metadata("design:type", Array)
-], Team.prototype, "users", void 0);
-Team = __decorate([
+    sequelize_typescript_1.BelongsTo(() => Player_1.Player),
+    __metadata("design:type", Player_1.Player)
+], DFS.prototype, "player", void 0);
+DFS = __decorate([
     sequelize_typescript_1.Table
-], Team);
-exports.Team = Team;
+], DFS);
+exports.DFS = DFS;

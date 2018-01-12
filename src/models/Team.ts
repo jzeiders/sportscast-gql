@@ -23,6 +23,12 @@ class Team extends Model<Team> {
 
 	@Column abbreviation: string;
 
+	@Column division: string;
+
+	@Column color: string;
+
+	@Column logo: string;
+
 	@HasMany(() => Game)
 	games: Game[];
 
@@ -33,7 +39,7 @@ class Team extends Model<Team> {
 	DFSs: DFS[];
 
 	@BelongsToMany(() => User, () => UserTeam)
-	teams: Team[];
+	users: Team[];
 }
 
 export { Team };

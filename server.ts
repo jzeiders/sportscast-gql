@@ -10,6 +10,8 @@ import db from "./src/db";
 import { createServer } from "http";
 import * as cors from "cors";
 import { SubscriptionServer } from "subscriptions-transport-ws";
+import createData from "./src/testdata";
+import { checkJwt } from "./src/api/auth";
 
 const PORT = 8080;
 
@@ -18,11 +20,15 @@ app.use(cors());
 app.use(
 	"/graphql",
 	bodyParser.json(),
-	graphqlExpress({
+	checkJwt,
+	graphqlExpress(req => ({
 		schema: graphQLSchema,
 		tracing: true,
-		cacheControl: true
-	})
+		cacheControl: true,
+		context: {
+			user: req.user
+		}
+	}))
 );
 app.get(
 	"/graphiql",
@@ -50,7 +56,7 @@ db.connection
 				}
 			);
 		});
-		sampleData();
+		createData();
 		updateScores();
 	})
 	.catch(err => {
@@ -58,11 +64,6 @@ db.connection
 		console.log(err);
 	});
 
-function sampleData() {
-	Team.create({ teamID: "0", name: "Heat" });
-	Team.create({ teamID: "1", name: "Celtics" });
-	Game.create({ location: "Boston", homeTeamId: 1, awayTeamId: 0 });
-}
 async function updateScores() {
 	setInterval(() => {
 		pubsub.publish("GAME_SCORE", {

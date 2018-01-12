@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
 const Team_1 = require("./Team");
 const Quarter_1 = require("./Quarter");
+const DFS_1 = require("./DFS");
 let Game = class Game extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -59,6 +60,10 @@ __decorate([
     sequelize_typescript_1.HasMany(() => Quarter_1.Quarter),
     __metadata("design:type", Array)
 ], Game.prototype, "Qaurters", void 0);
+__decorate([
+    sequelize_typescript_1.HasMany(() => DFS_1.DFS),
+    __metadata("design:type", Array)
+], Game.prototype, "DFSs", void 0);
 Game = __decorate([
     sequelize_typescript_1.Table
 ], Game);

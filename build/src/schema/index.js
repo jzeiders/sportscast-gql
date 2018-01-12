@@ -4,9 +4,11 @@ const graphql_tools_1 = require("graphql-tools");
 const Team_1 = require("../models/Team");
 const Game_1 = require("../models/Game");
 const Player_1 = require("../models/Player");
+const User_1 = require("../models/User");
 const sequelize_1 = require("sequelize");
 const Quarter_1 = require("../models/Quarter");
 const subscription_1 = require("./subscription");
+const mutation_1 = require("./mutation");
 const typeDefs = `
     type Query {
         hello: String
@@ -15,8 +17,17 @@ const typeDefs = `
         Game : Game
         Games : [Game]
         Player: Player
-        Players: [Player]
-    }
+		Players: [Player]
+		viewer: User
+	}
+	input SetUserTeamsInput {
+		teams: [String]
+		userId: String
+	}
+
+	type Mutation {
+		setUserTeams(input: SetUserTeamsInput) : User
+	}
     type Subscription {
         gameScoreUpdate: GameScore
     }
@@ -30,7 +41,8 @@ const typeDefs = `
         teamID  : String
         city : String
         name : String
-        abbreviation : String
+		abbreviation : String
+		division: String
         Games : [Game]
     }
     type Game {
@@ -64,7 +76,17 @@ const typeDefs = `
         number: String
         awayScore: Int
         homeScore: Int
-    }
+	}
+	type DFS {
+		fantasyPoints: Int
+		salary: Int
+	}
+	type User {
+		name: String
+		id: Int
+		email: String
+		teams: [Team]
+	}
 `;
 const resolvers = Object.assign({ Query: {
         hello(root, args, context) {
@@ -92,6 +114,9 @@ const resolvers = Object.assign({ Query: {
         },
         Players(root, args, context) {
             return Player_1.Player.findAll({ raw: true });
+        },
+        viewer(root, args, context) {
+            return User_1.User.findById(context.id);
         }
     }, Game: {
         HomeTeam(game) {
@@ -119,7 +144,7 @@ const resolvers = Object.assign({ Query: {
                 }
             });
         }
-    } }, subscription_1.resolvers);
+    } }, mutation_1.resolvers, subscription_1.resolvers);
 //Graphql Types don't support subscriptions in typings
 //This should be fixed at somepoint
 const jsSchema = graphql_tools_1.makeExecutableSchema({

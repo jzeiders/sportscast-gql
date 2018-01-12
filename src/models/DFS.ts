@@ -23,7 +23,7 @@ export class DFS extends Model<DFS> {
 
 	@ForeignKey(() => Team)
 	@Column
-	teamId: number;
+	teamId: string;
 
 	@BelongsTo(() => Team)
 	team: Team;
