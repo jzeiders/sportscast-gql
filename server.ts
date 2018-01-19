@@ -18,60 +18,60 @@ const PORT = 8080;
 const app = express();
 app.use(cors());
 app.use(
-	"/graphql",
-	bodyParser.json(),
-	checkJwt,
-	graphqlExpress(req => ({
-		schema: graphQLSchema,
-		tracing: true,
-		cacheControl: true,
-		context: {
-			user: req.user
-		}
-	}))
+  "/graphql",
+  bodyParser.json(),
+  checkJwt,
+  graphqlExpress(req => ({
+    schema: graphQLSchema,
+    tracing: true,
+    cacheControl: true,
+    context: {
+      user: req.user
+    }
+  }))
 );
 app.get(
-	"/graphiql",
-	graphiqlExpress({
-		endpointURL: "/graphql",
-		subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
-	})
+  "/graphiql",
+  graphiqlExpress({
+    endpointURL: "/graphql",
+    subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
+  })
 ); // if you want GraphiQL enabled
 
 const ws = createServer(app);
 
 db.connection
-	.sync({ force: true })
-	.then(() => {
-		ws.listen(PORT, () => {
-			new SubscriptionServer(
-				{
-					execute,
-					subscribe,
-					schema: graphQLSchema
-				},
-				{
-					server: ws,
-					path: "/subscriptions"
-				}
-			);
-		});
-		createData();
-		updateScores();
-	})
-	.catch(err => {
-		console.log("Failed to Start");
-		console.log(err);
-	});
+  .sync({ force: true })
+  .then(() => {
+    ws.listen(PORT, () => {
+      new SubscriptionServer(
+        {
+          execute,
+          subscribe,
+          schema: graphQLSchema
+        },
+        {
+          server: ws,
+          path: "/subscriptions"
+        }
+      );
+    });
+    createData();
+    updateScores();
+  })
+  .catch(err => {
+    console.log("Failed to Start");
+    console.log(err);
+  });
 
 async function updateScores() {
-	setInterval(() => {
-		pubsub.publish("GAME_SCORE", {
-			gameScoreUpdate: {
-				gameId: "1",
-				homeScore: Math.floor(Math.random() * 10),
-				awayScore: 10
-			}
-		});
-	}, 1000);
+  setInterval(() => {
+    pubsub.publish("GAME_SCORE", {
+      gameScoreUpdate: {
+        gameId: "1",
+        homeScore: Math.floor(Math.random() * 10),
+        awayScore: 10
+      }
+    });
+  }, 1000);
 }
